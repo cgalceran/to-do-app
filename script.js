@@ -49,7 +49,7 @@ function getTasks() {
             <div class="list">
             <input type="checkbox" onclick="if (this.checked) {toggle(${id + 1})} else {toggleOff(${id + 1})}">
             <p id="${id + 1}">${description}</p>
-            <img id="${id + 2}" onclick="deleteTask(${id})" src="/delete-button.png" hidden="hidden">
+            <img id="${id + 2}" onclick="deleteTask(${id})" src="delete-button.png" hidden="hidden">
             </div>
             </div>
         
