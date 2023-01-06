@@ -8,6 +8,7 @@ function createTask(e) {
     let task = {
         id: taskID,
         description: taskDescription,
+        completed: false
     }
 
     if (typeof (Storage) !== "undefined") { // Check if the browser accepts localStorage
@@ -44,42 +45,68 @@ function getTasks() {
             let description = tasks[index].description;
             let completed = tasks[index].completed;
 
-            taskList.innerHTML += `
-            <div id="${id}">
-            <div class="list">
-            <input type="checkbox" onclick="if (this.checked) {toggle(${id + 1})} else {toggleOff(${id + 1})}">
-            <p id="${id + 1}">${description}</p>
-            <img id="${id + 2}" onclick="deleteTask(${id})" src="delete-button.png" hidden="hidden">
-            </div>
-            </div>
-        
-        `;
+            if (completed == false) {
 
+                taskList.innerHTML += `
+                <div id="${id}">
+                <div class="list">
+                <input type="checkbox" onclick="if (this.checked) {toggleOn(${id + 1})} else {toggleOff(${id + 1})}">
+                <p id="${id + 1}">${description}</p>
+                <img id="${id + 2}" onclick="deleteTask(${id})" src="delete-button.png" hidden="hidden">
+                </div>
+                </div>
+            
+                `;
+            } else {
+                taskList.innerHTML += `
+                <div id="${id}">
+                <div class="list">
+                <input type="checkbox" checked onclick="if (this.checked) {toggleOn(${id + 1})} else {toggleOff(${id + 1})}">
+                <p class="strike" id="${id + 1}">${description}</p>
+                <img id="${id + 2}" onclick="deleteTask(${id})" src="delete-button.png">
+                </div>
+                </div>
+            
+                `;
+            }
         }
-
-
-
     }
-
-
 }
 
 
-// Cross Task if Done also delete icon should appear (This section I have to refactor)
+// Strikethrough Tasks if Done also delete icon should appear and boolean completed to true 
+//(This section I have to refactor, there has to be a better way than two toggle functions)
 
-function toggle(id) {
+function toggleOn(id) {
+    let task = [];
     let paragraph = document.getElementById(id);
     paragraph.classList.add("strike");
     let image = document.getElementById(id + 1);
     image.removeAttribute("hidden");
-
+    let tasks = JSON.parse(localStorage.getItem('tasks'));
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id == id - 1) {
+            console.log(tasks[i].completed = true);
+        }
+        task.push(tasks);
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 function toggleOff(id) {
+    let task = [];
     let paragraph = document.getElementById(id);
     paragraph.classList.remove("strike");
     let image = document.getElementById(id + 1);
     image.setAttribute("hidden", "hidden");
+    let tasks = JSON.parse(localStorage.getItem('tasks'));
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id == id - 1) {
+            console.log(tasks[i].completed = false);
+        }
+        task.push(tasks);
+    }
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 
 
 }
